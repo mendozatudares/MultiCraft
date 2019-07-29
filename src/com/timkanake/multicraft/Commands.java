@@ -85,7 +85,7 @@ public class Commands {
 		
 		
 		if(isHollow) {
-			blocksAffected = buildHollow(dimensions, startLoc, endLoc, m);
+			blocksAffected = buildHollow(startLoc, endLoc, m);
 			return blocksAffected;
 		}else {
 			blocksAffected = updateBlocks(startLoc, endLoc, m);
@@ -94,7 +94,7 @@ public class Commands {
 		return blocksAffected;
 	}
 	
-	public static List<BlockRecord> buildHollow(int[] dimensions, Location startLoc, Location endLoc, Material m) {	
+	public static List<BlockRecord> buildHollow(Location startLoc, Location endLoc, Material m) {	
 		List<BlockRecord> blocksAffected = new ArrayList<BlockRecord>();
 		// bottom Wall
 		blocksAffected.addAll(GameCommand.updateBlocks(startLoc, new Location(endLoc.getWorld(), endLoc.getX(), startLoc.getY(), endLoc.getZ()), m));

@@ -30,5 +30,5 @@ commands:
     description: Marks the second location in the selection of a region
     usage: /<command>
   rrbuild:
-    description: Builds a structure from loc1 to loc2 (Currently solid and made of stone)
-    usage: /<command>
+    description: Builds a structure from loc1 to loc2
+    usage: /<command> material-code(int) hollow-flag(int)

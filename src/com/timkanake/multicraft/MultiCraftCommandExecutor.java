@@ -119,7 +119,7 @@ public class MultiCraftCommandExecutor implements CommandExecutor{
 			for(Block b : blocks) {
 				tempMaterial = b.getType();
 				if(! tempMaterial.equals(Material.AIR)) {
-					startLocation = b.getLocation().add(0, 1, 0);
+					startLocation = b.getLocation();
 				}
 			}
 			
@@ -140,7 +140,7 @@ public class MultiCraftCommandExecutor implements CommandExecutor{
 			for(Block b : blocks) {
 				tempMaterial = b.getType();
 				if(! tempMaterial.equals(Material.AIR)) {
-					endLocation = b.getLocation().add(0, 1, 0);
+					endLocation = b.getLocation();
 				}
 			}
 			
@@ -160,12 +160,35 @@ public class MultiCraftCommandExecutor implements CommandExecutor{
 			
 			return true;
 		}else if(cmd.getName().equalsIgnoreCase("rrbuild")) {
+			int materialId = 1;			
+			if(args.length > 0) {
+				try {
+					materialId = Integer.parseInt(args[0]);
+				}catch(NumberFormatException e) {
+					try {
+						materialId = Materials.getId(args[0]);
+					}catch(MaterialDoesNotExistException f) {
+						p.sendMessage("The material you specified does not exists. Defaulting to stone.");
+						materialId = 1;
+					}
+				}
+			}			
+			
+			Material material = Material.getMaterial(materialId);
+			
 			RegionBuild rBuild = RegionBuild.getInstance();
 			
 			Location loc1 = rBuild.getStartLocation(p);
 			Location loc2 = rBuild.getEndLocation(p);
 			
-			Commands.updateBlocks(loc1,loc2, Material.getMaterial(1));
+			List<BlockRecord> blocksAffected = new ArrayList<BlockRecord>();
+			
+			if (args.length > 1)
+				blocksAffected = Commands.buildHollow(loc1,  loc2,  material);
+			else
+				blocksAffected = Commands.updateBlocks(loc1,loc2, material);
+			
+			Commands.updateUndoAndRedoStacks(blocksAffected, p);
 			p.sendMessage("Structure has been constructed in the region marked");
 		}
 		return false;
